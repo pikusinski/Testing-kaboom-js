@@ -219,6 +219,19 @@ H ",
       ]
     };
 
+    scene("start", () => {
+      add([
+        text("Press enter to start", { size: 24 }),
+        pos(vec2(160, 120)),
+        origin("center"),
+        color(255, 255, 255),
+      ]);
+      onKeyRelease("enter", () => {
+        go("game");
+      })
+    });
+
+    go("start");
 
 
     // }
