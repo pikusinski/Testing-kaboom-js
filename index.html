@@ -209,7 +209,7 @@ H ",
       ],
 
       "p": () => [
-        sprite("mario", { frame: 0 }),
+        sprite("marcino", { frame: 0 }),
         area({ width: 16, height: 16 }),
         body(),
         //mario(),
@@ -218,6 +218,50 @@ H ",
         "player"
       ]
     };
+
+   
+
+
+
+    scene("game", (levelNumber = 0) => {
+      layers([
+        "bg",
+        "game",
+        "ui",
+      ], "game");
+      const level = addLevel(LEVELS[levelNumber], levelConf);
+
+      add([sprite("cloud"),
+      pos(20, 50),
+      layer("bg")
+      ]);
+
+      add([
+        sprite("hill"),
+        pos(32, 208),
+        layer("bg"),
+        origin("bot")
+      ])
+
+      add([
+        sprite("shrubbery"),
+        pos(200, 208),
+        layer("bg"),
+        origin("bot")
+      ])
+
+      add([
+        text("Level " + (levelNumber + 1), { size: 24 }),
+        pos(vec2(160, 120)),
+        color(255, 255, 255),
+        origin("center"),
+        layer('ui'),
+        lifespan(1, { fade: 0.5 })
+      ]);
+
+      const player = level.spawn("p", 1, 10)
+
+    });
 
     scene("start", () => {
       add([
@@ -232,8 +276,6 @@ H ",
     });
 
     go("start");
-
-
     // }
   </script>
 </head>
