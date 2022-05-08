@@ -39,8 +39,9 @@
       '*': () => [
         sprite('invisible'),
         area(),
-        solid(),
         bump(120, 2),
+        solid(),
+        // fallthrough(),
         origin('bot'),
         'invisible',
         'coinBox'
@@ -50,6 +51,7 @@
         sprite('invisible'),
         area(),
         solid(),
+        // fallthrough(),
         bump(120, 2),
         origin('bot'),
         'invisible',
@@ -242,6 +244,14 @@
           baddy.squash();
         } else {
           // Mario has been hurt. Add logic here later...
+        }
+      })
+
+      player.onCollide('invisible', (invisibleBlock) => {
+        if(player.velY < 0) {
+          invisibleBlock.solid()
+        } else {
+          invisibleBlock.solid()
         }
       })
 
