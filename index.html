@@ -130,7 +130,7 @@
         solid(),
         body(),
         patrol(50),
-        //enemy(),
+        enemy(),
         origin('bot'),
         'badGuy'
       ],
@@ -199,11 +199,28 @@
       onKeyPress('space', () => {
         if (player.grounded()) {
           player.jump()
+          canSquash = true
         }
       })
 
       player.onUpdate(() => {
         camFollow(player)
+
+        if (player.grounded()) {
+          canSquash = false;
+        }
+      })
+
+      let canSquash = false;
+
+      player.onCollide('badGuy', (baddy) => {
+        if (baddy.isAlive == false) return
+        if (canSquash) {
+          // Mario has jumped on the bad guy:
+          baddy.squash();
+        } else {
+          // Mario has been hurt. Add logic here later...
+        }
       })
     })
 
@@ -247,6 +264,26 @@
       const currCam = camPos()
       if (currCam.x < target.pos.x) {
         camPos(target.pos.x, currCam.y)
+      }
+    }
+
+    function enemy() {
+      return {
+        id: 'enemy',
+        require: ['pos', 'area', 'sprite', 'patrol'],
+        isAlive: true,
+        update() {
+
+        },
+        squash() {
+          this.isAlive = false
+          this.unuse('patrol')
+          this.stop()
+          this.frame = 2
+          this.area.width = 16
+          this.area.height = 8
+          this.use(lifespan(0.5, { fade: 0.1 }))
+        }
       }
     }
   </script>
