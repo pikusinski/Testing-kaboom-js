@@ -129,7 +129,7 @@
         area({ width: 16, height: 16 }),
         solid(),
         body(),
-        //patrol(50),
+        patrol(50),
         //enemy(),
         origin('bot'),
         'badGuy'
@@ -201,6 +201,10 @@
           player.jump()
         }
       })
+
+      player.onUpdate(() => {
+        camFollow(player)
+      })
     })
 
     scene('start', () => {
@@ -216,6 +220,35 @@
     })
 
     go('start')
+
+    function patrol(distance = 100, speed = 50, dir = 1) {
+      return {
+        id: 'patrol',
+        require: ['pos', 'area',],
+        startingPos: vec2(0, 0),
+        add() {
+          this.startingPos = this.pos;
+          this.on('collide', (obj, side) => {
+            if (side === 'left' || side === 'right') {
+              dir = -dir
+            }
+          })
+        },
+        update() {
+          if (Math.abs(this.pos.x - this.startingPos.x) >= distance) {
+            dir = -dir
+          }
+          this.move(speed * dir, 0)
+        },
+      }
+    }
+
+    function camFollow(target) {
+      const currCam = camPos()
+      if (currCam.x < target.pos.x) {
+        camPos(target.pos.x, currCam.y)
+      }
+    }
   </script>
 </head>
 
