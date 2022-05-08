@@ -20,6 +20,7 @@
     loadSprite('ground', 'ground.png')
     loadSprite('questionBox', 'questionBox.png')
     loadSprite('emptyBox', 'emptyBox.png')
+    loadSprite('invisible', 'invisible.png')
     loadSprite('brick', 'brick.png')
     loadSprite('coin', 'coin.png')
     loadSprite('bigMushy', 'bigMushy.png')
@@ -37,11 +38,22 @@
 
       '*': () => [
         sprite('invisible'),
-        arena(),
+        area(),
         solid(),
         bump(120, 2),
         origin('bot'),
-        'invisible'
+        'invisible',
+        'coinBox'
+      ],
+
+      '^': () => [
+        sprite('invisible'),
+        area(),
+        solid(),
+        bump(120, 2),
+        origin('bot'),
+        'invisible',
+        'mushyBox'
       ],
 
       '=': () => [
@@ -248,7 +260,21 @@
           box.bump()
         }
 
-        if(obj.is('brick')) {
+        if (obj.is('invisible')) {
+          if (obj.is('coinBox')) {
+            let coin = level.spawn('c', obj.gridPos.sub(0, 1))
+            coin.bump()
+          } else
+            if (obj.is('mushyBox')) {
+              level.spawn('M', obj.gridPos.sub(0, 1))
+            }
+          var pos = obj.gridPos
+          destroy(obj)
+          var box = level.spawn('!', pos)
+          box.bump()
+        }
+
+        if (obj.is('brick')) {
           obj.bump()
         }
       })
