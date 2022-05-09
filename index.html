@@ -229,7 +229,6 @@
 
       player.onUpdate(() => {
         camFollow(player)
-
         if (player.grounded()) {
           canSquash = false;
         }
@@ -247,11 +246,13 @@
         }
       })
 
-      player.onCollide('invisible', (invisibleBlock) => {
-        if(player.velY < 0) {
-          invisibleBlock.solid()
-        } else {
-          invisibleBlock.solid()
+      player.onCollide('invisible', (invisibleBlock, playerCol) => {
+        if(playerCol?.isBottom()) {
+          invisibleBlock.solid = false
+          player.pos.y = player.pos.y - 1
+          setTimeout(() => {
+            invisibleBlock.solid = true
+          }, 500)
         }
       })
 
